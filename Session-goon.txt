@@ -1,0 +1,162 @@
+//@version=6
+indicator('Session Time Range Lines', overlay = true, max_lines_count = 500)
+
+// ── Inputs ────────────────────────────────────────────────────────────────
+tz = input.string('UTC', 'Timezone', options = ['UTC', 'GMT', 'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Sao_Paulo', 'Europe/London', 'Europe/Berlin', 'Europe/Moscow', 'Asia/Dhaka', 'Asia/Kolkata', 'Asia/Dubai', 'Asia/Shanghai', 'Asia/Tokyo', 'Asia/Singapore', 'Australia/Sydney'])
+
+// Main session (always active)
+sees = input.session('0900-1700', 'Time Range (Start-End, format HHMM-HHMM)')
+
+// Disable toggle - when set to 0, disables the other 2 sessions
+disableOtherSessions = input.bool(false, 'Disable Additional Sessions')
+
+// Additional session options
+sess2Enable = input.bool(true, 'Enable Session 2')
+sess2 = input.session('1000-1300', 'Session 2 Time Range (Start-End, format HHMM-HHMM)')
+
+sess3Enable = input.bool(true, 'Enable Session 3')
+sess3 = input.session('1300-1600', 'Session 3 Time Range (Start-End, format HHMM-HHMM)')
+
+showStart = input.bool(true, 'Show Start Line')
+showEnd = input.bool(true, 'Show End Line')
+startColor = input.color(color.new(color.lime, 0), 'Start Line Color')
+endColor = input.color(color.new(color.red, 0), 'End Line Color')
+lineStyleInput = input.string('Dashed', 'Line Style', options = ['Dashed', 'Dotted', 'Solid'])
+lineWidth = input.int(1, 'Line Width', minval = 1, maxval = 4)
+
+showBias = input.bool(true, 'Show Bullish/Bearish Bias Arrow')
+bullColor = input.color(color.new(color.teal, 0), 'Bullish Arrow Color')
+bearColor = input.color(color.new(color.red, 0), 'Bearish Arrow Color')
+arrowSize = input.string('Normal', 'Arrow Size', options = ['Tiny', 'Small', 'Normal', 'Large'])
+
+// ── Helpers ──────────────────────────────────────────────────────────────
+getStyle(styleStr) =>
+    styleStr == 'Dashed' ? line.style_dashed : styleStr == 'Dotted' ? line.style_dotted : line.style_solid
+
+// ── Session 1 (Main - "sees") ─────────────────────────────────────────────
+inSession1 = not na(time(timeframe.period, sees, tz))
+sessionStart1 = inSession1 and not inSession1[1]
+sessionEnd1 = not inSession1 and inSession1[1]
+
+var float sessionOpen1 = na
+var float sessionHigh1 = na
+var float sessionLow1 = na
+
+if sessionStart1
+    sessionOpen1 := open
+    sessionHigh1 := high
+    sessionLow1 := low
+if inSession1
+    sessionHigh1 := math.max(sessionHigh1, high)
+    sessionLow1 := math.min(sessionLow1, low)
+
+range1 = sessionHigh1 - sessionLow1
+biasReady1 = showBias and sessionEnd1 and not na(sessionOpen1)
+bullishSignal1 = biasReady1 and close > sessionOpen1
+bearishSignal1 = biasReady1 and close <= sessionOpen1
+
+// ── Session 2 (Additional) ────────────────────────────────────────────────
+inSession2 = not na(time(timeframe.period, sess2, tz)) and not disableOtherSessions and sess2Enable
+sessionStart2 = inSession2 and not inSession2[1]
+sessionEnd2 = not inSession2 and inSession2[1]
+
+var float sessionOpen2 = na
+var float sessionHigh2 = na
+var float sessionLow2 = na
+
+if sessionStart2
+    sessionOpen2 := open
+    sessionHigh2 := high
+    sessionLow2 := low
+if inSession2
+    sessionHigh2 := math.max(sessionHigh2, high)
+    sessionLow2 := math.min(sessionLow2, low)
+
+range2 = sessionHigh2 - sessionLow2
+biasReady2 = showBias and sessionEnd2 and not na(sessionOpen2)
+bullishSignal2 = biasReady2 and close > sessionOpen2
+bearishSignal2 = biasReady2 and close <= sessionOpen2
+
+// ── Session 3 (Additional) ────────────────────────────────────────────────
+inSession3 = not na(time(timeframe.period, sess3, tz)) and not disableOtherSessions and sess3Enable
+sessionStart3 = inSession3 and not inSession3[1]
+sessionEnd3 = not inSession3 and inSession3[1]
+
+var float sessionOpen3 = na
+var float sessionHigh3 = na
+var float sessionLow3 = na
+
+if sessionStart3
+    sessionOpen3 := open
+    sessionHigh3 := high
+    sessionLow3 := low
+if inSession3
+    sessionHigh3 := math.max(sessionHigh3, high)
+    sessionLow3 := math.min(sessionLow3, low)
+
+range3 = sessionHigh3 - sessionLow3
+biasReady3 = showBias and sessionEnd3 and not na(sessionOpen3)
+bullishSignal3 = biasReady3 and close > sessionOpen3
+bearishSignal3 = biasReady3 and close <= sessionOpen3
+
+// ── Draw vertical dashed lines for all sessions ──────────────────────────
+
+// Session 1
+if showStart and sessionStart1
+    line.new(bar_index, low, bar_index, high, extend = extend.both, color = startColor, style = getStyle(lineStyleInput), width = lineWidth)
+
+if showEnd and sessionEnd1
+    line.new(bar_index, low, bar_index, high, extend = extend.both, color = endColor, style = getStyle(lineStyleInput), width = lineWidth)
+
+// Session 2
+if showStart and sessionStart2
+    line.new(bar_index, low, bar_index, high, extend = extend.both, color = color.new(color.blue, 0), style = getStyle(lineStyleInput), width = lineWidth)
+
+if showEnd and sessionEnd2
+    line.new(bar_index, low, bar_index, high, extend = extend.both, color = color.new(color.orange, 0), style = getStyle(lineStyleInput), width = lineWidth)
+
+// Session 3
+if showStart and sessionStart3
+    line.new(bar_index, low, bar_index, high, extend = extend.both, color = color.new(color.purple, 0), style = getStyle(lineStyleInput), width = lineWidth)
+
+if showEnd and sessionEnd3
+    line.new(bar_index, low, bar_index, high, extend = extend.both, color = color.new(color.fuchsia, 0), style = getStyle(lineStyleInput), width = lineWidth)
+
+// ── Arrow size resolution ───────────────────────────────────────────────
+isTiny = arrowSize == 'Tiny'
+isSmall = arrowSize == 'Small'
+isNormal = arrowSize == 'Normal'
+isLarge = arrowSize == 'Large'
+
+// ── Session 1 Arrows ──────────────────────────────────────────────────────
+plotshape(bullishSignal1 and isTiny, title = 'Bullish Bias 1 (Tiny)', style = shape.triangleup, location = location.belowbar, color = bullColor, size = size.tiny, offset = 0)
+plotshape(bullishSignal1 and isSmall, title = 'Bullish Bias 1 (Small)', style = shape.triangleup, location = location.belowbar, color = bullColor, size = size.small, offset = 0)
+plotshape(bullishSignal1 and isNormal, title = 'Bullish Bias 1 (Normal)', style = shape.triangleup, location = location.belowbar, color = bullColor, size = size.normal, offset = 0)
+plotshape(bullishSignal1 and isLarge, title = 'Bullish Bias 1 (Large)', style = shape.triangleup, location = location.belowbar, color = bullColor, size = size.large, offset = 0)
+
+plotshape(bearishSignal1 and isTiny, title = 'Bearish Bias 1 (Tiny)', style = shape.triangledown, location = location.abovebar, color = bearColor, size = size.tiny, offset = 0)
+plotshape(bearishSignal1 and isSmall, title = 'Bearish Bias 1 (Small)', style = shape.triangledown, location = location.abovebar, color = bearColor, size = size.small, offset = 0)
+plotshape(bearishSignal1 and isNormal, title = 'Bearish Bias 1 (Normal)', style = shape.triangledown, location = location.abovebar, color = bearColor, size = size.normal, offset = 0)
+plotshape(bearishSignal1 and isLarge, title = 'Bearish Bias 1 (Large)', style = shape.triangledown, location = location.abovebar, color = bearColor, size = size.large, offset = 0)
+
+// ── Session 2 Arrows ──────────────────────────────────────────────────────
+plotshape(bullishSignal2 and isTiny, title = 'Bullish Bias 2 (Tiny)', style = shape.triangleup, location = location.belowbar, color = color.new(color.teal, 50), size = size.tiny, offset = 0)
+plotshape(bullishSignal2 and isSmall, title = 'Bullish Bias 2 (Small)', style = shape.triangleup, location = location.belowbar, color = color.new(color.teal, 50), size = size.small, offset = 0)
+plotshape(bullishSignal2 and isNormal, title = 'Bullish Bias 2 (Normal)', style = shape.triangleup, location = location.belowbar, color = color.new(color.teal, 50), size = size.normal, offset = 0)
+plotshape(bullishSignal2 and isLarge, title = 'Bullish Bias 2 (Large)', style = shape.triangleup, location = location.belowbar, color = color.new(color.teal, 50), size = size.large, offset = 0)
+
+plotshape(bearishSignal2 and isTiny, title = 'Bearish Bias 2 (Tiny)', style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 50), size = size.tiny, offset = 0)
+plotshape(bearishSignal2 and isSmall, title = 'Bearish Bias 2 (Small)', style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 50), size = size.small, offset = 0)
+plotshape(bearishSignal2 and isNormal, title = 'Bearish Bias 2 (Normal)', style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 50), size = size.normal, offset = 0)
+plotshape(bearishSignal2 and isLarge, title = 'Bearish Bias 2 (Large)', style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 50), size = size.large, offset = 0)
+
+// ── Session 3 Arrows ──────────────────────────────────────────────────────
+plotshape(bullishSignal3 and isTiny, title = 'Bullish Bias 3 (Tiny)', style = shape.triangleup, location = location.belowbar, color = color.new(color.lime, 50), size = size.tiny, offset = 0)
+plotshape(bullishSignal3 and isSmall, title = 'Bullish Bias 3 (Small)', style = shape.triangleup, location = location.belowbar, color = color.new(color.lime, 50), size = size.small, offset = 0)
+plotshape(bullishSignal3 and isNormal, title = 'Bullish Bias 3 (Normal)', style = shape.triangleup, location = location.belowbar, color = color.new(color.lime, 50), size = size.normal, offset = 0)
+plotshape(bullishSignal3 and isLarge, title = 'Bullish Bias 3 (Large)', style = shape.triangleup, location = location.belowbar, color = color.new(color.lime, 50), size = size.large, offset = 0)
+
+plotshape(bearishSignal3 and isTiny, title = 'Bearish Bias 3 (Tiny)', style = shape.triangledown, location = location.abovebar, color = color.new(color.orange, 50), size = size.tiny, offset = 0)
+plotshape(bearishSignal3 and isSmall, title = 'Bearish Bias 3 (Small)', style = shape.triangledown, location = location.abovebar, color = color.new(color.orange, 50), size = size.small, offset = 0)
+plotshape(bearishSignal3 and isNormal, title = 'Bearish Bias 3 (Normal)', style = shape.triangledown, location = location.abovebar, color = color.new(color.orange, 50), size = size.normal, offset = 0)
+plotshape(bearishSignal3 and isLarge, title = 'Bearish Bias 3 (Large)', style = shape.triangledown, location = location.abovebar, color = color.new(color.orange, 50), size = size.large, offset = 0)
