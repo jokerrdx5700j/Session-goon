@@ -1,0 +1,216 @@
+📍 Order Flow Trading Roadmap (Sequential Learning) 
+-----------------------------------------------------------------
+🟢 Step 1: Market Microstructure  						         |
+How venues, matching engines, and order books create prices, AMT.|
+Start here to understand the foundation of price formation.      |
+------------------------------------------------------------------
+🟢 Step 2: Order Types                                    
+Market, limit, stop, IOC/FOK, iceberg, pegged orders.      
+Learn their behaviors and execution differences.           
+-------------------------------------------------------------
+🟢 Step 3: Limit Order Book (LOB)                           
+Bids/asks, depth, queue priority, resting vs executed orders.
+-------------------------------------------------------------
+🟢 Step 4: Bid‑Ask Spread & Liquidity                       
+Spread drivers, visible vs hidden liquidity, depth dynamics.
+-------------------------------------------------------------
+🟢 Step 5: Time & Sales (Tape Reading)                      
+Reading prints, trade size, aggressor side.                 
+-------------------------------------------------------------
+🟢 Step 6: Market Depth & Imbalance                         
+Volume imbalances at price levels and their interpretation. 
+-------------------------------------------------------------
+🟢 Step 7: Volume Profile & Market Profile                  
+Distribution by price, POC, value area, session structure.  
+-------------------------------------------------------------
+🟢 Step 8: Footprint / Cluster / Heatmap Charts             
+Traded volume inside bars, bid/ask per price.               
+-------------------------------------------------------------
+🟢 Step 9: Delta & Cumulative Delta                         
+Signed volume per bar and cumulative over time.             
+-------------------------------------------------------------
+🟢 Step 10: Order Flow Imbalance (OFI)                      
+Mathematical measures of buying vs selling pressure.        
+-------------------------------------------------------------
+🟢 Step 11: Absorption vs Aggression                        
+Large resting orders vs aggressive market orders.           
+-------------------------------------------------------------
+🟢 Step 12: Iceberg & Hidden Liquidity                     
+Spotting hidden large orders executed in pieces.           
+-------------------------------------------------------------
+🟢 Step 13: Stop Hunts & Liquidity Pools                   
+How stops cluster and algorithms target liquidity.         
+-------------------------------------------------------------
+🟢 Step 14: VWAP, TWAP, POV Algorithms                     
+Benchmark strategies and execution footprints.             
+-------------------------------------------------------------
+🟢 Step 15: Market Impact & Transaction Costs               
+Permanent vs temporary impact, slippage, realized costs.    
+-------------------------------------------------------------
+🟢 Step 16: Optimal Execution Theory                        
+Almgren–Chriss, Implementation Shortfall.                   
+-------------------------------------------------------------
+🟢 Step 17: Liquidity Providers & Market Makers             
+Quoting strategies, inventory risk, two‑sided quoting.       
+-------------------------------------------------------------
+🟢 Step 18: Matching Engine Mechanics                       
+How trades are matched, rules influencing price moves.      
+-------------------------------------------------------------
+🟢 Step 19: Exchange Auctions                               
+Auction imbalance and price discovery at open/close.        
+-------------------------------------------------------------
+🟢 Step 20: Tick Data & Book Reconstruction                 
+Tick‑by‑tick handling, rebuilding LOB from trades/quotes.    
+-------------------------------------------------------------
+🟢 Step 21: Signed Volume vs Tick Measures                  
+Different trade‑signing methods, pros/cons.                  
+-------------------------------------------------------------
+🟢 Step 22: VPIN / Flow Toxicity                            
+Metrics for toxic flow and adverse liquidity impact.        
+-------------------------------------------------------------
+🟢 Step 23: Auction Theory & Adverse Selection              
+Kyle, Glosten–Milgrom, Easley–O’Hara models.                
+-------------------------------------------------------------
+🟢 Step 24: High‑Frequency Trading & Latency Arbitrage      
+HFT behavior, colocation, latency patterns.                 
+-------------------------------------------------------------
+🟢 Step 25: Statistical & Quant Methods                     
+Building predictive features from order flow.               
+-------------------------------------------------------------
+🟢 Step 26: Backtesting & Tick‑Level Simulation             
+Fill modeling, survivorship bias, tick‑data challenges.      
+-------------------------------------------------------------
+
+
+
+-------------------
+Tearms of Ordeflow|
+-------------------
+
+----------------------------------------------------------------------------------------------------------
+Tick - The minimum price movement of a trading instrument.✅
+Tick size - The smallest allowable increment between different prices.✅
+Tick value - The monetary value of one tick for a contract.✅
+Contract - A traded instrument (e.g., futures contract, option contract).✅
+Exchange - The marketplace where instruments are listed and trades occur.✅
+Bid - The highest price a buyer is willing to pay.✅
+Ask (Offer) - The lowest price a seller is willing to accept.✅
+Bid-Ask Spread - The difference between the best ask and best bid.✅
+Mid Price - The midpoint of the best bid and best ask.✅
+Last Price - The price of the most recent trade.✅
+Trade - An executed transaction between buyer and seller.✅
+Fair Value - Where buyers and sellers are agree.✅
+Volume - The quantity of contracts/shares traded over a period.
+Traded Volume - Actual traded quantity at a given time or price.
+Volume at Price (VAP) - Total volume executed at a specific price level.
+Time & Sales (Tape) - Stream/list of executed trades with time, size, and price.
+Order Flow - The stream of incoming orders and executed trades over time.
+Order Book - The list of current bids and asks (resting orders) by price/size.
+Level 1 - Best bid/ask and last trade (top-of-book data).
+Level 2 - Market depth showing multiple price levels and sizes.
+Depth of Market (DOM) - Display of available quantity at multiple price levels.
+Market Order - An order to buy/sell immediately at the best available price.
+Limit Order - An order to buy/sell at a specified price or better.
+Stop Order (Stop Loss) - An order that becomes a market order once a price trigger is hit.
+Stop-Limit Order - A stop that becomes a limit order at the trigger.
+Iceberg Order - A large order split into visible and hidden portions to hide full size.
+Hidden Order - Order quantity not shown in the public order book.
+Fill - Execution of (all or part of) an order.
+Partial Fill - Only part of the order is executed.
+Aggressive Order - An order that takes liquidity (trades against resting orders).
+Passive Order - An order that supplies liquidity (rests in the book).
+Maker - A trader/order that adds liquidity (resting limit order).
+Taker - A trader/order that removes liquidity (market or aggressive order).
+Liquidity - Availability of volume at or near the current price.
+Liquidity Provider - Participant supplying resting orders.
+Liquidity Taker - Participant consuming resting liquidity.
+Slippage - Difference between expected and actual execution price.
+Market Impact - The effect of an order on subsequent prices.
+Order Imbalance - Unequal aggregate buy vs. sell interest at a price/time.
+Volume Imbalance - Difference in volume between bid-side and ask-side trades.
+Bid/Ask Delta - Difference between buy-side and sell-side executed volume.
+Cumulative Delta - Running total of signed volume (buy minus sell) over time.
+Footprint Chart - Chart showing executed volume split by bid/ask at each price.
+Footprint (Bid/Ask prints) - Individual cells showing buy vs sell volume at price/time.
+Trade Prints - Individual trade records (size, price, time, aggressor side).
+Execution - Process of matching and filling an order.
+Fill Rate - Percent or speed at which orders are filled.
+Order Routing - Path an order takes to an exchange or venue.
+Smart Order Router (SOR) - System that sends orders to best available venues.
+Matching Engine - Exchange component that matches incoming orders with resting orders.
+Time-in-Force (TIF) - Instruction controlling how long an order remains active (e.g., GTC).
+Good-Till-Cancelled (GTC) - Order remains active until explicitly cancelled.
+Immediate-or-Cancel (IOC) - Execute as much as possible immediately; cancel remainder.
+Fill-or-Kill (FOK) - Execute entire order immediately or cancel it.
+Market Depth - Aggregate visible size at each price level.
+Book Pressure - Net resting size pressure on one side of the book (buy/sell).
+Spoofing - Illegal practice of placing orders to mislead then cancelling them.
+Layering - Placing multiple deceptive orders at different prices (illegal practice).
+Quote - A bid or ask price published by market participants.
+Quote Stuffing - Flooding the market with large numbers of quotes to slow competitors.
+Price Ladder - Vertical display of price levels with size (used in DOM).
+Heatmap - Visual display of liquidity accumulation or trade intensity over price/time.
+Volume Profile - Histogram of volume traded at each price over a time range.
+VWAP (Volume Weighted Average Price) - Average price weighted by volume over a period.
+TWAP (Time Weighted Average Price) - Average price evenly weighted over time.
+Order Size - Quantity of contracts/shares in an order.
+Block Trade - Very large, often negotiated trade executed off-exchange or with special reporting.
+Parent Order - Original large order that may be split into children for execution.
+Child Order - Portion of a parent order, often used in order slicing.
+Order Slicing - Breaking a large order into smaller pieces to reduce impact.
+Algorithmic Execution - Use of algorithms to execute orders (e.g., VWAP algos).
+Execution Algorithm - Specific algorithm (TWAP, VWAP, POV, iceberg algorithm).
+POV (Percent of Volume) - Execution algorithm that targets a set percentage of market volume.
+Rebate / Maker-Taker Fee - Fee/rebate structure rewarding makers or charging takers.
+Price Discovery - Process by which markets arrive at fair price through trades/quotes.
+Opening Auction - Matching mechanism at market open to determine starting price.
+Closing Auction - Auction at session close for final price discovery.
+Continuous Auction - Normal continuous trading outside auction periods.
+Pre-market / After-hours - Trading sessions before official open or after official close.
+Cross Trade - Trade where both sides are matched internally or off-exchange at a set price.
+Matched Trade - Trade executed by a matching engine between two orders.
+Clearing - Process ensuring settlement and guaranteeing trade obligations.
+Settlement - Transfer of security ownership and payment after a trade.
+Clearinghouse - Entity that guarantees and clears trades between counterparties.
+NOII (Net Order Imbalance Indicator) - Indicator of buy/sell imbalance before auction.
+Market Data Feed - Stream of quotes and trades from an exchange or aggregator.
+Feed Handler - Software component parsing exchange market data.
+Latency - Delay between an event and its visibility to participants.
+Exchange Latency - Time delay inside an exchange or across networks.
+Latency Arbitrage - Exploiting speed differences to profit from stale quotes.
+Timestamp - Time recorded for quotes/trades (important for sequencing).
+Quote Size - Visible size at a quoted price.
+Trade Size - Size of an executed trade.
+Resting Order - Order present in the book waiting to be matched.
+Aggressor Side - Side (buy or sell) that initiated the trade (took liquidity).
+Passive Side - Side that provided the liquidity which got taken.
+Price Level - Specific price row in the order book.
+Best Bid / Best Ask - Highest bid and lowest ask at top of book.
+Stacking - Adding multiple orders at the same price level to create depth.
+Spoof Size - Cancelled quoted size intended to mislead (part of spoofing).
+Wash Trade - Illegal trade where seller and buyer are the same or colluding.
+Quote Match Rule - Exchange rules that determine execution priority (price/time).
+Priority (Price/Time) - Matching priority rules: best price first, then earlier time.
+Crossing Network - Platform matching buy and sell orders at midpoint or specified price.
+Dark Pool - Private trading venue where order details are not displayed publicly.
+On-Exchange vs Off-Exchange - Whether trade occurs on the public exchange or elsewhere.
+Trade-Through - Executing at a price worse than a protected/top-of-book price (regulated).
+Aggressive Volume - Volume that resulted from taker/aggressive orders.
+Passive Volume - Volume resulting from makers/resting orders being taken.
+Signed Volume - Volume labeled positive/negative based on aggressor side.
+Book Refresh - Update to displayed book after trades or quote changes.
+Order Book Replay - Reconstructing order book changes from market data for analysis.
+-------------------------------------------------------------------------------------------------------
+
+
+
+
+--------------
+Best Software|
+--------------
+
+---------------------
+ATAS
+Bookmap
+Deepcharts
+--------------------
